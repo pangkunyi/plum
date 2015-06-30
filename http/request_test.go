@@ -6,7 +6,7 @@ import (
 )
 
 func TestIp(t *testing.T) {
-	r := _http.Request{}
+	r := &_http.Request{}
 	r.RemoteAddr = "192.16.8.8:56781"
 	if Ip(r) != "192.16.8.8" {
 		t.Errorf("failed:%s", Ip(r))

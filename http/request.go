@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func Ip(r _http.Request) string {
+func Ip(r *_http.Request) string {
 	address := r.Header.Get("X-Real-IP")
 	if address != "" && address != "unknown" {
 		return address

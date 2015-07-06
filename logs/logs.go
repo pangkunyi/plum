@@ -52,3 +52,13 @@ func (l *Logger) Print(msg string) error {
 func (l *Logger) Printf(format string, v ...interface{}) {
 	l.Print(fmt.Sprintf(format, v...))
 }
+
+func (l *Logger) Fatal(msg string) {
+	l.Print(msg)
+	os.Exit(1)
+}
+
+func (l *Logger) Fatalf(format string, v ...interface{}) {
+	l.Print(fmt.Sprintf(format, v...))
+	os.Exit(1)
+}

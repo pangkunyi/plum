@@ -29,8 +29,9 @@ func TestIp2Int64(t *testing.T) {
 }
 
 func TestSeek(t *testing.T) {
-	ipData := Seek("195.7.9.254")
-	if ipData.Start != 3272015872 || ipData.End != 3272019967 || ipData.Country != "罗马尼亚" || ipData.Shortcut != "ro" {
-		t.Errorf("failed:%d", ipData)
+	ip := "195.7.16.254"
+	ipData := Seek(ip)
+	if ipData.Country != "意大利" || ipData.Shortcut != "it" {
+		t.Errorf("seek ip[%s], failed:%#v", ipData)
 	}
 }

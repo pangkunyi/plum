@@ -2,6 +2,7 @@ package files
 
 import (
 	"bufio"
+	"io"
 	"os"
 )
 
@@ -11,14 +12,21 @@ func ScanFile(filename string, lineFn func(line string) error) error {
 		return err
 	}
 	defer fd.Close()
-	scanner := bufio.NewScanner(fd)
-	for scanner.Scan() {
-		if err := lineFn(scanner.Text()); err != nil {
-			return err
+	reader := bufio.NewReader(fd)
+	for {
+		line, isPrefix, err := reader.ReadLine()
+		if err != nil {
+			if err == io.EOF {
+				break
+			} else {
+				return err
+			}
 		}
-	}
-	if err := scanner.Err(); err != nil {
-		return err
+		if !isPrefix {
+			if err := lineFn(string(line)); err != nil {
+				return err
+			}
+		}
 	}
 	return nil
 }

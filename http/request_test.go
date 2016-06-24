@@ -33,3 +33,12 @@ func TestIp(t *testing.T) {
 		t.Errorf("failed:%s", Ip(r))
 	}
 }
+
+func TestUrl2String(t *testing.T) {
+	url := "http://www.baidu.com"
+	content, err := Url2String(url)
+	if err != nil {
+		t.Errorf("failed to get url:%s", url)
+	}
+	t.Log(content)
+}

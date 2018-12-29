@@ -77,8 +77,13 @@ func NewIpData(line string) *IpData {
 	if len(fields) != 6 {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}
-	startIp, endIp, shortcut, mcc, mnc, carrier := fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]
-	return &IpData{Start: Ip2Int64(startIp), End: Ip2Int64(endIp), Shortcut: shortcut, Mcc: mcc, Mnc: mnc, Carrier: carrier}
+	startIp, err1 := ParseInt(fields[0], 10, 64)
+	endIp, err2 := ParseInt(fields[1], 10, 64)
+	if err1 != nil || err2 != nil {
+		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
+	}
+	shortcut, mcc, mnc, carrier := fields[2], fields[3], fields[4], fields[5]
+	return &IpData{Start: startIp, End: endIp, Shortcut: shortcut, Mcc: mcc, Mnc: mnc, Carrier: carrier}
 }
 
 func Seek(ip string) *IpData {

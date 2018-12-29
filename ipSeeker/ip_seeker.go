@@ -77,8 +77,8 @@ func NewIpData(line string) *IpData {
 	if len(fields) != 6 {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}
-	startIp, err1 := ParseInt(fields[0], 10, 64)
-	endIp, err2 := ParseInt(fields[1], 10, 64)
+	startIp, err1 := strconv.ParseInt(fields[0], 10, 64)
+	endIp, err2 := strconv.ParseInt(fields[1], 10, 64)
 	if err1 != nil || err2 != nil {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}

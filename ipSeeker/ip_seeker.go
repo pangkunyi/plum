@@ -2,10 +2,11 @@ package ipSeeker
 
 import (
 	"fmt"
-	"github.com/pangkunyi/plum/files"
 	"log"
 	"strconv"
 	"strings"
+
+	"github.com/pangkunyi/plum/files"
 )
 
 const (
@@ -33,8 +34,10 @@ func InitIpData() {
 type IpData struct {
 	Start    int64
 	End      int64
-	Country  string
 	Shortcut string
+	Mcc      string
+	Mnc      string
+	Carrier  string
 }
 
 func (this *IpData) Compare(ipValue int64) int {
@@ -71,11 +74,11 @@ func Ip2Int64(ip string) int64 {
 
 func NewIpData(line string) *IpData {
 	fields := strings.Fields(line)
-	if len(fields) != 4 {
+	if len(fields) != 6 {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}
-	startIp, endIp, country, shortcut := fields[0], fields[1], fields[2], fields[3]
-	return &IpData{Start: Ip2Int64(startIp), End: Ip2Int64(endIp), Country: country, Shortcut: shortcut}
+	startIp, endIp, shortcut, mcc, mnc, carrier := fields[0], fields[1], fields[2], fields[3], fields[4], fields[5]
+	return &IpData{Start: Ip2Int64(startIp), End: Ip2Int64(endIp), Shortcut: shortcut, Mcc: mcc, Mnc: mnc, Carrier: carrier}
 }
 
 func Seek(ip string) *IpData {

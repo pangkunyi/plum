@@ -73,7 +73,7 @@ func Ip2Int64(ip string) int64 {
 }
 
 func NewIpData(line string) *IpData {
-	fields := strings.Fields(line)
+	fields := strings.Split(line, "\x01")
 	if len(fields) != 6 {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}

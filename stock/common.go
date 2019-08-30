@@ -1,5 +1,6 @@
 package stock
 
+//Quote stock quote
 type Quote struct {
 	Code     string
 	Name     string
@@ -32,8 +33,9 @@ type Quote struct {
 	SaleP5   float64
 }
 
-var EMPTY_QUOTE = Quote{}
+var emptyQuote = Quote{}
 
+//Service stock quote service
 type Service interface {
 	GetQuote(code string) (Quote, error)
 	GetQuotes(codes []string) (map[string]Quote, error)

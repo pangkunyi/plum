@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-func Ip(r *_http.Request) string {
+//IP get ip from http request
+func IP(r *_http.Request) string {
 	address := r.Header.Get("X-Real-IP")
 	if address != "" && address != "unknown" {
 		return address
@@ -27,7 +28,8 @@ func Ip(r *_http.Request) string {
 	return address[:strings.Index(address, ":")]
 }
 
-func Url2Bytes(url string) ([]byte, error) {
+//URL2Bytes get content bytes from a url
+func URL2Bytes(url string) ([]byte, error) {
 	resp, err := _http.Get(url)
 	if err != nil {
 		return nil, err
@@ -36,8 +38,9 @@ func Url2Bytes(url string) ([]byte, error) {
 	return ioutil.ReadAll(resp.Body)
 }
 
-func Url2String(url string) (string, error) {
-	body, err := Url2Bytes(url)
+//URL2String get content string from a url
+func URL2String(url string) (string, error) {
+	body, err := URL2Bytes(url)
 	if err != nil {
 		return "", err
 	}

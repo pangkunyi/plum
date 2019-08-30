@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+//ScanFileFull scan a file line by line, it can handle the long line
 func ScanFileFull(filename string, lineFn func(line string) error) error {
 	fd, err := os.Open(filename)
 	if err != nil {
@@ -43,6 +44,7 @@ func ScanFileFull(filename string, lineFn func(line string) error) error {
 	return nil
 }
 
+//ScanFilesFull scan files line by line, it can handle the long line
 func ScanFilesFull(filenames []string, lineFn func(line string) error) error {
 	for _, filename := range filenames {
 		if err := ScanFileFull(filename, lineFn); err != nil {
@@ -52,6 +54,7 @@ func ScanFilesFull(filenames []string, lineFn func(line string) error) error {
 	return nil
 }
 
+//ScanFile scan a file line by line, it can not handle the long line
 func ScanFile(filename string, lineFn func(line string) error) error {
 	fd, err := os.Open(filename)
 	if err != nil {
@@ -77,6 +80,7 @@ func ScanFile(filename string, lineFn func(line string) error) error {
 	return nil
 }
 
+//ScanFiles scan files line by line, it can not handle the long line
 func ScanFiles(filenames []string, lineFn func(line string) error) error {
 	for _, filename := range filenames {
 		if err := ScanFile(filename, lineFn); err != nil {

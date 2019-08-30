@@ -14,14 +14,16 @@ import (
 )
 
 const (
-	SINA_F_URL        = "http://hq.sinajs.cn/list=%s"
-	SINA_F_FETCH_SIZE = 100
+	sinaStockListURL   = "http://hq.sinajs.cn/list=%s"
+	sinaStockFetchSize = 100
 )
 
+//SinaService sina stock service
 type SinaService struct {
 	Service
 }
 
+//NewSinaService create a SinaService instance
 func NewSinaService() *SinaService {
 	return &SinaService{}
 }
@@ -29,27 +31,28 @@ func NewSinaService() *SinaService {
 func code2SinaCode(code string) string {
 	if strings.HasPrefix(code, "6") {
 		return "sh" + code
-	} else {
-		return "sz" + code
 	}
+	return "sz" + code
 }
 
 func sinaCode2Code(code string) string {
 	return code[2:]
 }
 
+//GetQuote get sina stock quote by code
 func (s *SinaService) GetQuote(code string) (Quote, error) {
 	qMap, err := s.GetQuotes([]string{code})
 	if err != nil {
-		return EMPTY_QUOTE, err
+		return emptyQuote, err
 	}
 	q, ok := qMap[code]
 	if !ok {
-		return EMPTY_QUOTE, fmt.Errorf("no quote for code %s", code)
+		return emptyQuote, fmt.Errorf("no quote for code %s", code)
 	}
 	return q, nil
 }
 
+//GetQuotes get sina stock quotes by codes
 func (s *SinaService) GetQuotes(codes []string) (map[string]Quote, error) {
 	qMap := make(map[string]Quote)
 	idx := 0
@@ -57,8 +60,8 @@ func (s *SinaService) GetQuotes(codes []string) (map[string]Quote, error) {
 	for _, code := range codes {
 		codesStr = codesStr + code2SinaCode(code) + ","
 		idx++
-		if idx%SINA_F_FETCH_SIZE == 0 {
-			quotes, err := getQuotes(fmt.Sprintf(SINA_F_URL, codesStr))
+		if idx%sinaStockFetchSize == 0 {
+			quotes, err := getQuotes(fmt.Sprintf(sinaStockListURL, codesStr))
 			if err != nil {
 				return qMap, err
 			}
@@ -70,7 +73,7 @@ func (s *SinaService) GetQuotes(codes []string) (map[string]Quote, error) {
 		}
 	}
 	if idx > 0 {
-		quotes, err := getQuotes(fmt.Sprintf(SINA_F_URL, codesStr))
+		quotes, err := getQuotes(fmt.Sprintf(sinaStockListURL, codesStr))
 		if err != nil {
 			return qMap, err
 		}
@@ -106,12 +109,11 @@ func getQuotes(url string) (quotes map[string]Quote, err error) {
 		}
 		quotes[q.Code] = q
 	}
-	return
 }
 
 func parseQuoteLine(line string) (Quote, error) {
 	if !strings.HasPrefix(line, `var hq_str_`) {
-		return EMPTY_QUOTE, fmt.Errorf("error sina quote line:%s", line)
+		return emptyQuote, fmt.Errorf("error sina quote line:%s", line)
 	}
 	defer func() {
 		if err := recover(); err != nil {

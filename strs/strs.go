@@ -6,10 +6,12 @@ var sqlReplacer = strings.NewReplacer("\n", "\\n", "'", "\\'", "\\", "\\\\", "\r
 
 var regexReplacer = strings.NewReplacer("\u0000", "\\0", ".", "\\.", "^", "\\^", "$", "\\$", "*", "\\*", "+", "\\+", "?", "\\?", "(", "\\(", ")", "\\)", "[", "\\[", "{", "\\{", "\\", "\\\\", "|", "\\|")
 
-func SqlEscape(s string) string {
-	return sqlReplacer.Replace(s)
+//SQLEscape escape the sql string to a validated sql string
+func SQLEscape(sql string) string {
+	return sqlReplacer.Replace(sql)
 }
 
-func RegexEscape(s string) string {
-	return regexReplacer.Replace(s)
+//RegexEscape escape the regex string to a validate regex string
+func RegexEscape(re string) string {
+	return regexReplacer.Replace(re)
 }

@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//FileLoader file load struct
 type FileLoader struct {
 	filename       string
 	linesProcessor func([]string) (interface{}, error)
@@ -15,52 +16,55 @@ type FileLoader struct {
 	value          atomic.Value
 }
 
-func (this *FileLoader) Value() interface{} {
-	return this.value.Load()
+//Value get value from file loader
+func (fl *FileLoader) Value() interface{} {
+	return fl.value.Load()
 }
 
-func (this *FileLoader) start() (*FileLoader, error) {
-	err := this.loadFile()
+func (fl *FileLoader) start() (*FileLoader, error) {
+	err := fl.loadFile()
 	if err != nil {
-		return this, err
+		return fl, err
 	}
 	go func() {
 		for {
-			err := this.loadFile()
+			err := fl.loadFile()
 			if err != nil {
-				log.Printf("failed to load file %s\n", this.filename)
+				log.Printf("failed to load file %s\n", fl.filename)
 			}
 			time.Sleep(5 * time.Second)
 		}
 	}()
-	return this, nil
+	return fl, nil
 }
-func (this *FileLoader) loadFile() error {
-	fi, err := os.Stat(this.filename)
+
+func (fl *FileLoader) loadFile() error {
+	fi, err := os.Stat(fl.filename)
 	if err != nil {
 		return err
 	}
 	if fi.IsDir() {
-		return fmt.Errorf("failed to load file, cause by [%s] is dir", this.filename)
+		return fmt.Errorf("failed to load file, cause by [%s] is dir", fl.filename)
 	}
-	if fi.ModTime().After(this.lastModifyTime) {
+	if fi.ModTime().After(fl.lastModifyTime) {
 		lines := make([]string, 0)
-		if err = ScanFile(this.filename, func(line string) error {
+		if err = ScanFile(fl.filename, func(line string) error {
 			lines = append(lines, line)
 			return nil
 		}); err != nil {
 			return err
 		}
-		val, err := this.linesProcessor(lines)
+		val, err := fl.linesProcessor(lines)
 		if err != nil {
 			return err
 		}
-		this.value.Store(val)
-		this.lastModifyTime = fi.ModTime()
+		fl.value.Store(val)
+		fl.lastModifyTime = fi.ModTime()
 	}
 	return nil
 }
 
+//NewFileLoader create a file loader instance
 func NewFileLoader(filename string, linesProcessor func([]string) (interface{}, error)) (*FileLoader, error) {
 	fileLoader := &FileLoader{filename: filename, linesProcessor: linesProcessor}
 	return fileLoader.start()

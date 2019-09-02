@@ -1,3 +1,7 @@
+github.com/disintegration/imaging v1.6.1 h1:JnBbK6ECIZb1NsWIikP9pd8gIlTIRx7fuDNpU9fsxOE=
+github.com/disintegration/imaging v1.6.1/go.mod h1:xuIt+sRxDFrHS0drzXUlCJthkJ8k7lkkUojDSR247MQ=
+github.com/golang/image v0.0.0-20180708004352-c73c2afc3b81 h1:OpDoMqNPzziCEab7zYA3p2EcusxoKgegKueV8uduECo=
+github.com/golang/image v0.0.0-20180708004352-c73c2afc3b81/go.mod h1:W3cvIh6MZCq53QRt4EH8hvU9HPLAPXNxfcoJxCiaTV4=
 github.com/golang/text v0.3.2 h1:vDAeTQXl8YUdGoj2vMsMnzHi1xMJJ9S7iwnTBFL/pkA=
 github.com/golang/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
 github.com/golang/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:BZR6KJOI/IQ5FlSQroxL7yevEMRCz1dARTXHD9s4mHE=

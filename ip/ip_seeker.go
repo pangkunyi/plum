@@ -1,16 +1,12 @@
 package ip
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"log"
 	"strconv"
 	"strings"
-
-	"github.com/pangkunyi/plum/files"
-)
-
-const (
-	defaultDataFile = "ip.seeker.dat"
 )
 
 var (
@@ -18,21 +14,20 @@ var (
 	datas        = make([]*Data, 0)
 )
 
-//InitIPSeeker init ip seeker
-func InitIPSeeker(dataFile string) error {
-	if dataFile == "" {
-		dataFile = defaultDataFile
-	}
-	if err := files.ScanFile(dataFile, func(line string) error {
+func init() {
+	buf := bufio.NewReader(strings.NewReader(ipdat))
+	for {
+		line, err := buf.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				datas = append(datas, newIPData(line))
+				break
+			}
+			return
+		}
 		datas = append(datas, newIPData(line))
-		return nil
-	}); err != nil {
-		return err
 	}
-	if len(datas) < 1 {
-		return fmt.Errorf("empty ip datas, please check ip data file[%s]", dataFile)
-	}
-	return nil
+	ipdat = ""
 }
 
 //Data ip data struct

@@ -4,10 +4,6 @@ import (
 	"testing"
 )
 
-func init() {
-	InitIPSeeker("ip.seeker.dat")
-}
-
 func TestIP2Int64(t *testing.T) {
 	val := IP2Int64("1.1.1.1")
 	if val != 256*256*256+256*256+256+1 {

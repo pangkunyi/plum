@@ -15,7 +15,7 @@ var (
 )
 
 func init() {
-	buf := bufio.NewReader(strings.NewReader(ipdat))
+	buf := bufio.NewReader(strings.NewReader(ipdat()))
 	for {
 		line, err := buf.ReadString('\n')
 		if err != nil {
@@ -27,7 +27,6 @@ func init() {
 		}
 		datas = append(datas, newIPData(line))
 	}
-	ipdat = ""
 }
 
 //Data ip data struct
@@ -35,8 +34,6 @@ type Data struct {
 	Start    int64
 	End      int64
 	Shortcut string
-	Mcc      string
-	Mnc      string
 	Carrier  string
 }
 
@@ -76,7 +73,7 @@ func IP2Int64(ip string) int64 {
 
 func newIPData(line string) *Data {
 	fields := strings.Split(line, "\x01")
-	if len(fields) != 6 {
+	if len(fields) != 4 {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}
 	startIP, err1 := strconv.ParseInt(fields[0], 10, 64)
@@ -84,8 +81,8 @@ func newIPData(line string) *Data {
 	if err1 != nil || err2 != nil {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}
-	shortcut, mcc, mnc, carrier := fields[2], fields[3], fields[4], fields[5]
-	return &Data{Start: startIP, End: endIP, Shortcut: shortcut, Mcc: mcc, Mnc: mnc, Carrier: carrier}
+	shortcut, carrier := fields[2], fields[3]
+	return &Data{Start: startIP, End: endIP, Shortcut: shortcut, Carrier: carrier}
 }
 
 //Seek seek ip data with an ip

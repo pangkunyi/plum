@@ -87,7 +87,7 @@ func (s *SinaService) GetQuotes(codes []string) (map[string]Quote, error) {
 func getQuotes(url string) (quotes map[string]Quote, err error) {
 	quotes = make(map[string]Quote)
 	var body []byte
-	if body, err = http.Url2Bytes(url); err != nil {
+	if body, err = http.URL2Bytes(url); err != nil {
 		return
 	}
 	if body, err = encoding.GbkToUtf8(body); err != nil {

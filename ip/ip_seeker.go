@@ -81,7 +81,7 @@ func newIPData(line string) *Data {
 	if err1 != nil || err2 != nil {
 		log.Fatal(fmt.Errorf("invalid ip data line: %s", line))
 	}
-	shortcut, carrier := fields[2], fields[3]
+	shortcut, carrier := fields[2], strings.TrimSpace(fields[3])
 	return &Data{Start: startIP, End: endIP, Shortcut: shortcut, Carrier: carrier}
 }
 
